@@ -26,7 +26,7 @@ func (h *UserHandler) CreateUser(c echo.Context) error {
 
 	var req dto.CreateUserRequest
 	if err := c.Bind(&req); err != nil {
-		return c.JSON(400,  map[string]string{"errodasr": err.Error()})
+		return c.JSON(400,  map[string]string{"error": err.Error()})
 	}
 
 	if err := h.Validate.ValidateStruct(&req); err != nil {
