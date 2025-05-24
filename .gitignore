@@ -1,0 +1,6 @@
+.air.toml
+tmp
+*.db
+*.sqlite
+*.sqlite3
+config/jwt
