@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"errors"
 	"simplificafinancas/internal/user/adapter/http/dto"
 	"simplificafinancas/internal/user/domain"
 	"simplificafinancas/pkg/utils"
@@ -22,6 +23,9 @@ func (uc *UpdateUserUseCase) Execute(email string, req *dto.UpdateUserRequest) (
 		return nil, err
 	}
 
+	if user == nil {
+		return nil, errors.New("user not found")
+	}
     if req.Name != nil {
         user.Name = *req.Name
     }
@@ -35,7 +39,6 @@ func (uc *UpdateUserUseCase) Execute(email string, req *dto.UpdateUserRequest) (
 		}
         user.Password = password
     }
-
     if err := uc.Repo.Update(user); err != nil {
         return nil, err
     }

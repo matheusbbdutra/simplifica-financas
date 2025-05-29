@@ -70,7 +70,7 @@ func (h *UserHandler) UpdateUser(c echo.Context) error {
 
 	user := c.Get("user")
     if user == nil {
-        return c.JSON(200, map[string]string{"message": "UpdateUser sem JWT"})
+        return c.JSON(401, map[string]string{"message": "Unauthorized"})
     }
 
     userToken := user.(*jwt.Token)
