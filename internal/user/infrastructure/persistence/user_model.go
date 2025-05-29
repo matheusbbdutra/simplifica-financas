@@ -6,7 +6,7 @@ import (
 )
 
 type UserModel struct {
-	ID        string `json:"id" gorm:"primaryKey"`
+	ID        uint `json:"id" gorm:"primaryKey;autoIncrement"`
 	Name	  string `json:"name" gorm:"not null"`
 	Email     string `json:"email" gorm:"not null;unique"`
 	Password  string `json:"password" gorm:"not null"`
@@ -19,7 +19,7 @@ func (UserModel) TableName() string {
 }
 
 func NewUserModelFromDomain(user *domain.User) *UserModel {
-	var id string
+	var id uint
     if user.ID != nil {
         id = *user.ID
     }
