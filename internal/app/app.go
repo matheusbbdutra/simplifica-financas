@@ -1,19 +1,21 @@
 package app
 
 import (
+	mid "simplificafinancas/internal/common/adapters/http/middleware"
 	"simplificafinancas/internal/user/adapter/http/handler"
 	"simplificafinancas/internal/user/application/usecase"
 	"simplificafinancas/internal/user/infrastructure/persistence"
 	"simplificafinancas/pkg/utils"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 type App struct {
 	Echo *echo.Echo
-	db *gorm.DB
+	db   *gorm.DB
 	// User
 }
 
@@ -22,12 +24,19 @@ func NewApp(e *echo.Echo) *App {
 }
 
 func (a *App) InitDB() {
-    db, err := gorm.Open(sqlite.Open("data/database.db"), &gorm.Config{})
-    if err != nil {
-        panic(err)
-    }
+	db, err := gorm.Open(sqlite.Open("data/database.db"), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
 	db.AutoMigrate(&persistence.UserModel{})
-    a.db = db
+	a.db = db
+}
+
+func (a *App) InitMiddleware() {
+	a.Echo.Use(middleware.Logger())
+	a.Echo.Use(middleware.Recover())
+	a.Echo.Use(mid.JWTAuth())
+
 }
 
 func (a *App) InitRoutes() {
@@ -38,9 +47,13 @@ func (a *App) InitRoutes() {
 func (a *App) newUserModule() {
 	userRepo := persistence.NewUserRepository(a.db)
 	createUser := usecase.NewCreateUserUseCase(userRepo)
+	loginUser := usecase.NewLoginUserUseCase(userRepo)
+	updateUser := usecase.NewUpdateUserUseCase(userRepo)
 	validate := utils.NewValidator()
-	handler := handler.NewUserHandler(validate, createUser)
+	handler := handler.NewUserHandler(validate, createUser, loginUser, updateUser)
 	userGroup := a.Echo.Group("/api/user")
-	
-	userGroup.POST("/create", handler.CreateUser)
+
+	userGroup.POST("/register", handler.CreateUser)
+	userGroup.POST("/login", handler.LoginUser)
+	userGroup.POST("/update", handler.UpdateUser)
 }

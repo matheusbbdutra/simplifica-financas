@@ -1,9 +1,12 @@
 package domain
 
-import "time"
+import (
+	"simplificafinancas/pkg/utils"
+	"time"
+)
 
 type User struct {
-	ID *string
+	ID *uint
 	Name string
 	Email string
 	Password string
@@ -22,4 +25,8 @@ func NewUser(
 		Password: password,
 		CreatedAt: time.Now(),
 	}
+}
+
+func (u *User) CheckPassword(password string) bool {
+	return utils.CheckPasswordHash(password, u.Password)
 }

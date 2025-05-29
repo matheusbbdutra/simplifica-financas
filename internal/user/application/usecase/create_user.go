@@ -1,8 +1,9 @@
 package usecase
 
 import (
-    "simplificafinancas/internal/user/domain"
-    "simplificafinancas/internal/user/adapter/http/dto"
+	"simplificafinancas/internal/user/adapter/http/dto"
+	"simplificafinancas/internal/user/domain"
+	"simplificafinancas/pkg/utils"
 )
 
 type CreateUserUseCase struct {
@@ -16,10 +17,16 @@ func NewCreateUserUseCase(repo domain.UserRepository) *CreateUserUseCase {
 }
 
 func (uc *CreateUserUseCase) Execute(req *dto.CreateUserRequest) (error) {
+    password, err := utils.HashPassword(req.Password)
+    
+    if err != nil {
+        return err
+    }
+
     user := domain.NewUser(
         req.Name,
         req.Email,
-        req.Password,
+        password,
     )
 
     if err := uc.Repo.Create(user); err != nil {

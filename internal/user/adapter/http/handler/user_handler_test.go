@@ -25,9 +25,10 @@ func setupTestHandler(t *testing.T) *handler.UserHandler {
     }
     db.AutoMigrate(&persistence.UserModel{})
     repo := persistence.NewUserRepository(db)
-    usecase := usecase.NewCreateUserUseCase(repo)
+    createUser := usecase.NewCreateUserUseCase(repo)
+    loginUser := usecase.NewLoginUserUseCase(repo)
     validator := utils.NewValidator()
-    return handler.NewUserHandler(validator, usecase)
+    return handler.NewUserHandler(validator, createUser, loginUser)
 }
 
 func TestCreateUserHandler(t *testing.T) {
