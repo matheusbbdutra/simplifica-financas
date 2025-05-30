@@ -14,7 +14,11 @@ import (
 
 
 func GetPrivateKey() *rsa.PrivateKey {
-	keyData, err := os.ReadFile("config/jwt/private.pem")
+	keyPath := os.Getenv("JWT_PRIVATE_KEY_PATH")
+	if keyPath == "" {
+		log.Fatal("environment variable JWT_PRIVATE_KEY_PATH is not set or is empty")
+	}
+	keyData, err := os.ReadFile(keyPath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -28,7 +32,6 @@ func GetPrivateKey() *rsa.PrivateKey {
 		log.Fatal(err)
 	}
 
-
 	privateKey, ok := priInterface.(*rsa.PrivateKey)
 	if !ok {
 		log.Fatal("not RSA private key")
@@ -38,7 +41,11 @@ func GetPrivateKey() *rsa.PrivateKey {
 }
 
 func GetPublicKey() *rsa.PublicKey {
-	keyData, err := os.ReadFile("config/jwt/public.pem")
+	keyPath := os.Getenv("JWT_PUBLIC_KEY_PATH")
+	if keyPath == "" {
+		log.Fatal("environment variable JWT_PUBLIC_KEY_PATH is not set or is empty")
+	}
+	keyData, err := os.ReadFile(keyPath)
 	if err != nil {
 		log.Fatal(err)
 	}
