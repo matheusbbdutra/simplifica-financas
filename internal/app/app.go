@@ -7,6 +7,7 @@ import (
 	"simplificafinancas/internal/user/infrastructure/persistence"
 	"simplificafinancas/pkg/utils"
 
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/driver/sqlite"
@@ -41,6 +42,7 @@ func (a *App) InitMiddleware() {
 
 func (a *App) InitRoutes() {
 	a.newUserModule()
+	a.Echo.GET("/public/swagger/*", echoSwagger.WrapHandler)
 
 }
 
