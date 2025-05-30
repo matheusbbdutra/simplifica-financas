@@ -85,7 +85,7 @@ func TestUpdateUserHandler(t *testing.T) {
         Password: "12345678",
     }
     createTestUser(e, h, t, createUser)
-    
+
     loginReqBody := dto.LoginUserRequest{
         Email:    "teste@email.com",
         Password: "12345678",
@@ -107,7 +107,7 @@ func TestUpdateUserHandler(t *testing.T) {
     rec := httptest.NewRecorder()
     c := e.NewContext(req, rec)
     claims := jwt.MapClaims{
-        "user_id": "1", 
+        "user_id": 1, 
         "email":   "teste@email.com",
     }
     tokenObj := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)

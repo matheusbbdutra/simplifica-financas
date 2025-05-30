@@ -15,6 +15,9 @@ import (
 
 func GetPrivateKey() *rsa.PrivateKey {
 	keyPath := os.Getenv("JWT_PRIVATE_KEY_PATH")
+	if keyPath == "" {
+		log.Fatal("environment variable JWT_PRIVATE_KEY_PATH is not set or is empty")
+	}
 	keyData, err := os.ReadFile(keyPath)
 	if err != nil {
 		log.Fatal(err)
@@ -39,6 +42,9 @@ func GetPrivateKey() *rsa.PrivateKey {
 
 func GetPublicKey() *rsa.PublicKey {
 	keyPath := os.Getenv("JWT_PUBLIC_KEY_PATH")
+	if keyPath == "" {
+		log.Fatal("environment variable JWT_PUBLIC_KEY_PATH is not set or is empty")
+	}
 	keyData, err := os.ReadFile(keyPath)
 	if err != nil {
 		log.Fatal(err)
