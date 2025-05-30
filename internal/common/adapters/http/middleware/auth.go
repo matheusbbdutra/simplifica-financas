@@ -9,8 +9,6 @@ import (
 )
 
 func JWTAuth() echo.MiddlewareFunc {
-   
-	
 	return echojwt.WithConfig(echojwt.Config{
 		SigningKey: utils.GetPublicKey(),
 		SigningMethod: "RS256",

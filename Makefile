@@ -9,3 +9,6 @@ generate-jwt-keys:
 	@[ -d $(JWT_DIR) ] || mkdir -p $(JWT_DIR)
 	@[ -f $(PRIVATE_KEY) ] || openssl genpkey -algorithm RSA -out $(PRIVATE_KEY) -pkeyopt rsa_keygen_bits:2048
 	@[ -f $(PUBLIC_KEY) ]  || openssl rsa -pubout -in $(PRIVATE_KEY) -out $(PUBLIC_KEY)
+
+test:
+	JWT_PRIVATE_KEY_PATH=$(CURDIR)/config/jwt/private.pem go test ./...
